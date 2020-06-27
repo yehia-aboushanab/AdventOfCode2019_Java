@@ -12,7 +12,7 @@ class Day2_2019 {
 		try {
             //Open the input.tx file to get the mass of the modules
 			reader = new BufferedReader(new FileReader(
-					"input.txt"));
+					"input_Day1.txt"));
             String line = reader.readLine();
 			while (line != null) {
                 int TotalFuelForModule = 0;
