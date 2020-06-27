@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-class Day2_2019 {
+class Day1_2019 {
     private static void print(String arg){
         System.out.println(arg);
     }
