@@ -37,6 +37,8 @@ public class Day2_2019 {
                     "input_Day2.txt"));
             //all data is in a single line therefore there is no need for a loop to read data
             String line = reader.readLine();
+            //close the buffeer reader
+            reader.close();
             //convert the data from the file to an integer array for easier processing
             int[] input_array = Arrays.stream(line.split(",")).mapToInt(Integer::parseInt).toArray(); 
             int noun = 0;
