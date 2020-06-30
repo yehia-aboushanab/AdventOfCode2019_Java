@@ -8,6 +8,7 @@ public class Day2_2019 {
         System.out.println(arg);
     }
     private static int incode_output(int[] array_int){
+        //function to calculatet the return value of the incode a
         for (int i = 0 ; i<array_int.length;i=i+4){
             int op_code = array_int[i];
             int value_1_location=array_int[i+1];
@@ -34,10 +35,13 @@ public class Day2_2019 {
             //Open the input.tx file to get the mass of the modules
             reader = new BufferedReader(new FileReader(
                     "input_Day2.txt"));
+            //all data is in a single line therefore there is no need for a loop to read data
             String line = reader.readLine();
+            //convert the data from the file to an integer array for easier processing
             int[] input_array = Arrays.stream(line.split(",")).mapToInt(Integer::parseInt).toArray(); 
             int noun = 0;
             int verb = 0;
+            //nested loops to check for the correct combination to return the required value
             outerloop:
             for (int i = 0 ; i<input_array.length;i++){
                 for (int j = 0; j<input_array.length; j++){
@@ -48,12 +52,14 @@ public class Day2_2019 {
                     input_array[2]=verb;
                     int intcode_value = incode_output(input_array);
                     if (intcode_value == 19690720){
+                        //break out of both loops after achieveing the required value
                         break outerloop;
                     }
                 } 
             }
             
             print("Noun: "+String.valueOf(noun)+" Verb: "+String.valueOf(verb));
+            //calculation of the solution according to the formula provided by the challenge
             int solution = 100 * noun + verb;
             print("Solution: "+String.valueOf(solution));
         } catch (IOException e) {
