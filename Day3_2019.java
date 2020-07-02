@@ -7,15 +7,32 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+final class calc_points_return{
+    private List<int[]> points;
+    private List<Integer> steps;
+
+    public calc_points_return(List<int[]> point_list, List<Integer> step_list){
+        this.points=point_list;
+        this.steps=step_list;
+    }
+    public List<int[]> get_points(){
+        return this.points;
+    }
+    public List<Integer> get_steps(){
+        return this.steps;
+    }
+}
 public class Day3_2019 {
     private static void print(String arg){
         System.out.println(arg);
     }
-    public static Hashtable<int[],Integer> calc_points(String[] path) {
+    
+    public static calc_points_return calc_points(String[] path) {
         int currx = 0;
         int curry = 0;
         int step = 0;
-        Hashtable<int[],Integer> points_hash = new Hashtable<int[], Integer>();
+        List<int[]> points_list = new ArrayList<int[]>();
+        List<Integer> steps_list = new ArrayList<Integer>();
         int[] R_guide = {1,0};
         int[] L_guide = {-1,0};
         int[] U_guide = {0,1};
@@ -36,12 +53,13 @@ public class Day3_2019 {
                 curry += guide[1];
                 step += 1;
                 int[] tmp_point = {currx,curry};
-                if (!points_hash.contains(tmp_point)) {
-                    points_hash.put(tmp_point,step);
+                if (!points_list.contains(tmp_point)) {
+                    points_list.add(tmp_point);
+                    steps_list.add(step);
                 }
             }
         }
-        return points_hash;
+        return new calc_points_return(points_list, steps_list);
     }
     public static void main(String[] args) throws IOException {
         BufferedReader reader;
@@ -56,21 +74,19 @@ public class Day3_2019 {
         reader.close();
 
         String[] wire1_path = line1.split(",");
-        Hashtable<int[],Integer> wire1_Hash = new Hashtable<int[], Integer>();
-        wire1_Hash = calc_points(wire1_path);
-        List<int[]> wire1_points = new ArrayList<int[]>(wire1_Hash.keySet());
+        calc_points_return wire1_calc = calc_points(wire1_path);
         String[] wire2_path = line2.split(",");
-        Hashtable<int[],Integer> wire2_Hash = new Hashtable<int[], Integer>();
-        wire2_Hash = calc_points(wire2_path);
-        List<int[]> wire2_points = new ArrayList<int[]>(wire2_Hash.keySet());
+        calc_points_return wire2_calc = calc_points(wire2_path);
+        List<int[]>wire1_points = wire1_calc.get_points();
+        List<Integer>wire1_steps = wire1_calc.get_steps();
+        List<int[]>wire2_points = wire2_calc.get_points();
+        List<Integer>wire2_steps = wire2_calc.get_steps();
         List<int[]> intersection_points = new ArrayList<int[]>();
         List<Integer> Manhattan_distance = new ArrayList<Integer>();
         for (int[]point_wire1: wire1_points){
-            for (int[]point_wire2: wire2_points){
-                if (Arrays.equals(point_wire1, point_wire2)){
-                    intersection_points.add(point_wire1);
-                    Manhattan_distance.add(  Math.abs(point_wire1[0]) + Math.abs(point_wire1[1]));
-                }
+            if (wire2_points.contains(point_wire1)){
+                intersection_points.add(point_wire1);
+                Manhattan_distance.add(  Math.abs(point_wire1[0]) + Math.abs(point_wire1[1]));
             }
         }
 
@@ -79,11 +95,13 @@ public class Day3_2019 {
         print("minimum distance is: "+String.valueOf(Manhattan_distance.get(Min_Manhattan_distance_index)));
         List<Integer> Step = new ArrayList<Integer>();
         for (int[] point : intersection_points ){
-            int wire1_step = wire1_Hash.get(point);
-            int wire2_step = wire2_Hash.get(point);
+            int wire1_step_index = wire1_points.indexOf(point);
+            int wire2_step_index = wire2_points.indexOf(point);
+            int wire1_step = wire1_steps.get(wire1_step_index);
+            int wire2_step = wire2_steps.get(wire2_step_index);
             Step.add(wire1_step+wire2_step);
         }
-        int Min_step_distance_index  = Manhattan_distance.indexOf (Collections.min(Step));
+        int Min_step_distance_index  = Step.indexOf (Collections.min(Step));
         print("minimum steps are: "+String.valueOf(Step.get(Min_step_distance_index)));
         
     }
