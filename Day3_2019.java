@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+
 final class calc_points_return{
     private List<int[]> points;
     private List<Integer> steps;
@@ -23,6 +24,7 @@ final class calc_points_return{
     }
 }
 public class Day3_2019 {
+
     private static void print(String arg){
         System.out.println(arg);
     }
@@ -53,7 +55,15 @@ public class Day3_2019 {
                 curry += guide[1];
                 step += 1;
                 int[] tmp_point = {currx,curry};
-                if (!points_list.contains(tmp_point)) {
+                boolean not_found = true;
+                for (int j =0;j<points_list.size();j++){
+                    int[] point = points_list.get(j);
+                    if (Arrays.equals(tmp_point,point)){
+                        not_found = false;
+                        break;
+                    }
+                }
+                if (not_found){
                     points_list.add(tmp_point);
                     steps_list.add(step);
                 }
@@ -65,7 +75,7 @@ public class Day3_2019 {
         BufferedReader reader;
         //Open the input.tx file to get the mass of the modules
         reader = new BufferedReader(new FileReader(
-            "test.txt"));
+            "input_Day3.txt"));
         //get the directions for the first wire it is written in a single line
         String line1 = reader.readLine();
         //get the directions for the second wire it is written in a single line
@@ -81,12 +91,21 @@ public class Day3_2019 {
         List<Integer>wire1_steps = wire1_calc.get_steps();
         List<int[]>wire2_points = wire2_calc.get_points();
         List<Integer>wire2_steps = wire2_calc.get_steps();
-        List<int[]> intersection_points = new ArrayList<int[]>();
+        List<int[][]> intersection_points = new ArrayList<int[][]>();
         List<Integer> Manhattan_distance = new ArrayList<Integer>();
-        for (int[]point_wire1: wire1_points){
-            if (wire2_points.contains(point_wire1)){
-                intersection_points.add(point_wire1);
-                Manhattan_distance.add(  Math.abs(point_wire1[0]) + Math.abs(point_wire1[1]));
+        print(String.valueOf(wire1_points.size()));
+        for (int i =0;i<wire1_points.size();i++){
+            int[] point_wire1 = wire1_points.get(i);
+            print(String.valueOf(i));
+            for (int j =0;j<wire1_points.size();j++){
+                int[] point_wire2 = wire2_points.get(j);
+                if (Arrays.equals(point_wire1,point_wire2)){
+                    int[][] tmp_intersection_points = {point_wire1,point_wire2};
+                
+                    intersection_points.add(tmp_intersection_points);
+                    Manhattan_distance.add(  Math.abs(point_wire1[0]) + Math.abs(point_wire1[1]));
+                    break;
+                }
             }
         }
 
@@ -94,9 +113,9 @@ public class Day3_2019 {
         int Min_Manhattan_distance_index  = Manhattan_distance.indexOf (Collections.min(Manhattan_distance));
         print("minimum distance is: "+String.valueOf(Manhattan_distance.get(Min_Manhattan_distance_index)));
         List<Integer> Step = new ArrayList<Integer>();
-        for (int[] point : intersection_points ){
-            int wire1_step_index = wire1_points.indexOf(point);
-            int wire2_step_index = wire2_points.indexOf(point);
+        for (int[][] point : intersection_points ){
+            int wire1_step_index = wire1_points.indexOf(point[0]);
+            int wire2_step_index = wire2_points.indexOf(point[1]);
             int wire1_step = wire1_steps.get(wire1_step_index);
             int wire2_step = wire2_steps.get(wire2_step_index);
             Step.add(wire1_step+wire2_step);
