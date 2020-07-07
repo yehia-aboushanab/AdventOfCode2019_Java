@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CodeLens (Launch) - Day5_2019",
+            "request": "launch",
+            "mainClass": "Day5_2019",
+            "projectName": "AdventOfCode2019_Java_30fcd94"
+        },
+        {
             "name": "Java",
             "type": "java",
             "request": "launch",
