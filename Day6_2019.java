@@ -91,20 +91,43 @@ public class Day6_2019 {
                 Orbits_collection.Add_connected_object(Object_Array[1], Object_Array[0]);
                 line = reader.readLine();
             }
-            for (int i = 0 ; i <Orbits_collection.get_lenght_of_Object_List();i++){
-                String Object_Name = Orbits_collection.get_object_Name(i);
-                int number_of_orbits=0;
-                while (Orbits_collection.Got_connected_object(Object_Name)){
-                    number_of_orbits = number_of_orbits+1;
-                    int connected_index = Orbits_collection.get_object_index(Orbits_collection.get_connected_object(Object_Name));
-                    Object_Name = Orbits_collection.get_object_Name(connected_index);
-                }
-                Object_Name = Orbits_collection.get_object_Name(i);
-                Orbits_collection.Change_orbit_num(Object_Name, number_of_orbits);
+            //Solution for Part 1
+            // for (int i = 0 ; i <Orbits_collection.get_lenght_of_Object_List();i++){
+            //     String Object_Name = Orbits_collection.get_object_Name(i);
+            //     int number_of_orbits=0;
+            //     while (Orbits_collection.Got_connected_object(Object_Name)){
+            //         number_of_orbits = number_of_orbits+1;
+            //         int connected_index = Orbits_collection.get_object_index(Orbits_collection.get_connected_object(Object_Name));
+            //         Object_Name = Orbits_collection.get_object_Name(connected_index);
+            //     }
+            //     Object_Name = Orbits_collection.get_object_Name(i);
+            //     Orbits_collection.Change_orbit_num(Object_Name, number_of_orbits);
 
+            // }
+            // int Total_number_of_orbits = Orbits_collection.Get_Total_number_of_orbits();
+            // print("Total number of orbits: "+String.valueOf(Total_number_of_orbits));
+
+            //Solution for Part 2
+
+            String You_connected_object = Orbits_collection.get_connected_object("YOU");
+            int orbits_For_object_YOU = 0;
+            int orbits_For_object_SAN = 0;
+            outerloop:
+            while (You_connected_object !=""){
+                orbits_For_object_YOU=orbits_For_object_YOU+1;
+                String San_Connected_object = Orbits_collection.get_connected_object("SAN");
+                orbits_For_object_SAN=0;
+                while (San_Connected_object!=""){
+                    orbits_For_object_SAN=orbits_For_object_SAN+1;
+                    if (You_connected_object.equals(San_Connected_object)){
+                        break outerloop;
+                    }
+                    San_Connected_object = Orbits_collection.get_connected_object(San_Connected_object);
+                }
+                You_connected_object = Orbits_collection.get_connected_object(You_connected_object);
             }
-            int Total_number_of_orbits = Orbits_collection.Get_Total_number_of_orbits();
-            print("Total number of orbits: "+String.valueOf(Total_number_of_orbits));
+            int least_number_of_orbits = orbits_For_object_SAN+orbits_For_object_YOU -2;
+            print("Least number of orbits that need to be moved: "+String.valueOf(least_number_of_orbits));
         } catch (IOException e) {
 			e.printStackTrace();
 		}
